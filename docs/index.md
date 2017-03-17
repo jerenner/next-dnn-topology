@@ -11,10 +11,19 @@ layout: default
 
 Here we describe a project addressing signal/background classification in the [NEXT](http://next.ific.uv.es/next) experiment using deep neural networks (DNNs). This study is a continuation of [a previous study](https://arxiv.org/abs/1609.06202) of background rejection in NEXT using DNNs.  Though some of the details described in this study will be re-iterated below, please see the previous study for more details on how the NEXT detector operates.
 
-- [Background](#background)
 - [Software Requirements](#software-requirements)
-- [References](#additional-references)
+- [Background](#background)
+- [Data Formatting](#data-formatting)
+- [Neural Network Definition](#neural-network-definition)
+- [Additional References](#additional-references)
 
+## Software Requirements
+This study will require the use of Python (the [Anaconda](https://www.continuum.io) distribution is recommended) and several key Python packages:
+
+- [Numpy](http://www.numpy.org/)
+- [PyTables](http://www.pytables.org/)
+- [Jupyter Notebooks](http://jupyter.org/)
+- The [Keras](https://keras.io) deep learning library (with [Tensorflow](https://www.tensorflow.org))
 
 ## Background
 
@@ -24,7 +33,7 @@ NEXT has further power to reject background because the ionization track of most
 
 ![Monte Carlo simulation of signal (left) and background (right) events](fig/fig_blobs.png)
 **Monte Carlo simulation** of a signal (left) and background (right) event.  The signal event consists of two electrons emitted from a common vertex with a total energy equal to $$Q_{\beta\beta}$$.  The background event is a single electron with energy $$Q_{\beta\beta}$$.  Figure from [*J. Mart&iacute;n-Albo et al.  Sensitivity of NEXT-100 to neutrinoless double beta decay.  \[JHEP 1605 159 (2016)\]*](https://arxiv.org/abs/1511.09246).
-{: style="color:gray; font-size: 80%; text-align: center;"}
+{: style="color:gray; font-size: 80%; text-align: left;"}
 
 The electron track itself is observed in NEXT by a plane of silicon photomultipliers (SiPMs), which convert photons incident on their sensitive area into electrical current.  In the present phase of NEXT, the 10-kg-scale detector NEXT-NEW, the SiPM plane consists of 1792 SiPMs arranged with a 1 cm pitch.  In detecting an event, 2D (x,y) projections of the corresponding ionization track are formed by the light detected in the SiPMs in each z-interval ("slice") of the track.  That is, for each event, we are presented with a series of 2D SiPM "patterns" which must be used to make a decision on which type of event occurred - "signal" or "background".  
 
@@ -36,15 +45,40 @@ We will start with SiPM response data from each event arranged in a $$20\times 2
 
 ## Neural network definition
 
-This is the most interesting part of the study in which we determine which neural net performs best for the classification problem.  For this, several 
+This is the most interesting part of the study in which we determine which neural net performs best for the classification problem.  For this, several factors must be considered, including:
 
-## Software Requirements
-This study will require the use of Python (the [Anaconda](https://www.continuum.io) distribution is recommended) and several key Python packages:
+- **accuracy**: what percentage of the time the DNN correctly classifies an event.  The accuracy on test events (those not used in the training process) is the most important factor in evaluating the performance of the DNN.
+- **network size**: the number of parameters in the network.  Smaller is better, but if going larger means more accuracy it is likely to be worth it.
+- **network architecture**: the techniques employed in the construction of the network.  This will affect how long it takes to train the network, the tendency of the network to overtrain (memorize the training data rather than learn more general features that can be applied outside of the training set), and possibly how 
 
-- [Numpy](http://www.numpy.org/)
-- [PyTables](http://www.pytables.org/)
-- [Jupyter Notebooks](http://jupyter.org/)
-- The [Keras](https://keras.io) deep learning library (with [Tensorflow](https://www.tensorflow.org))
+It is likely that since our data is formatted in a 3D matrix, we will want to use 2D or 3D convolutional layers, in which a layer of neurons shares the same weights and biases, and each neuron in the layer takes as input some subset of the neurons in the previous layer.  The neurons in such layers roughly serve to identify certain "features" or patterns in neighboring input neurons.
+
+![Fully connected vs. convolutional layers](fig/fig_NNs.png)
+**Fully connected (left) vs. 2D convolutional (right) layers** in a neural network.  In a fully connected layer, each neuron from the previous layer is connected to every neuron as input.  In a 2D $$m\times n\,(\times\,k_i)$$ convolutional layer, each neuron takes as input an $$m\times n$$ subset of the previous layer of neurons arranged in $$k_i$$ input channels.  (A 3D convolutional layer would take a $$m\times n\times l\, (\times\, k_i)$$ subset.)  Part of figure from [*J. Renner et al.  Background rejection in NEXT using deep neural networks. \[JINST 12 T01004 (2017)\]*](https://arxiv.org/abs/1609.06202).
+{: style="color:gray; font-size: 80%; text-align: left;"}
+
+Keras/TensorFlow allows for the fast construction of neural networks using several different types of layers ([Dense (fully connected)](https://keras.io/layers/core/), [Conv2D, Conv3D](https://keras.io/layers/convolutional/)) with different [activation functions](https://keras.io/activations/) (sigmoid, relu, tanh), [loss functions](https://keras.io/losses/) and [training optimizers](https://keras.io/optimizers/), in combination with other deep learning techniques such as [dropout](https://keras.io/layers/core/#dropout) and [pooling](https://keras.io/layers/pooling/).
+
+The idea here is to find the optimal neural net that gives the best accuracy for the smallest network size and learns quickly and with fewest training events.  Again, though all such factors should be considered, the most important factor is the overall accuracy.  Even better, a neural network that allows for some understanding of how the classification decision is being made would be ideal.
+
+The construction of the DNN can be implemented directly into the NEXT classification Jupyter notebook by making a corresponding Python method definition.
+
+<a style="text-decoration: none; font-family: verdana, arial;" href="https://github.com/jerenner/next-dnn-topology">{% octicon clippy height:105 vertical-align: middle %}
+<br>**NEXT Classification Jupyter Notebook**</a>
+{: style="color:black; font-size: 130%; text-align: center;"}
+
+For example:
+
+```python
+inputs = Input(shape=(xdim, ydim, zdim, 1))
+cinputs = Convolution3D(256, 5, 5, 5, border_mode='same', subsample=(4, 4, 4), activation='relu',init='lecun_uniform')(inputs)
+cinputs = MaxPooling3D(pool_size=(3, 3, 3), strides=(2, 2, 2), border_mode='same', dim_ordering='default')(cinputs)
+f1 = Flatten()(cinputs)
+f1 = Dense(output_dim=128, activation='relu', init='lecun_uniform')(f1)
+f1 = Dropout(.3)(f1)
+inc_output = Dense(output_dim=1, activation='sigmoid',init='normal')(f1)
+model = Model(inputs, inc_output)
+```
 
 ## Additional References
 Some additional references:

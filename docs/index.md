@@ -1,5 +1,5 @@
 ---
-title: Introduction
+title:
 layout: default
 ---
 
@@ -7,13 +7,11 @@ layout: default
     src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-# Introduction
-
 Here we describe a project addressing signal/background classification in the [NEXT](http://next.ific.uv.es/next) experiment using deep neural networks (DNNs). This study is a continuation of [a previous study](https://arxiv.org/abs/1609.06202) of background rejection in NEXT using DNNs.  Though some of the details described in this study will be re-iterated below, please see the previous study for more details on how the NEXT detector operates.
 
 - [Software Requirements](#software-requirements)
 - [Background](#background)
-- [Data Formatting](#data-formatting)
+- [Data Format](#data-format)
 - [Neural Network Definition](#neural-network-definition)
 - [Additional References](#additional-references)
 
@@ -39,9 +37,12 @@ The electron track itself is observed in NEXT by a plane of silicon photomultipl
 
 Rather than attempting to reconstruct the 3D track from these patterns and then examine the topology of the track to determine whether we have a signal or background event, we will attempt to skip the reconstruction step altogether.  *We intend to train a DNN to learn the difference between a signal and a background event based solely on the matrix of SiPM signals.*  The idea of one or two "blobs", or how we differentiate the two types of events visually, is no longer relevant.  The DNN works out in whatever way it can how to distinguish the two types of events.
 
-## Data formatting
+## Data format
 
 We will start with SiPM response data from each event arranged in a $$20\times 20\times N_s$$ matrix.  In this case the SiPM signals have already been integrated into $$N_s$$ time slices and the $$20\times 20$$ window in (x,y) over which the event occurs has been selected.  Note that the events are expected to be localized to approximately a cube of side 20 cm<sup>3</sup>.  Events containing less than some percentage (90%) of their total SiPM charge in SiPMs outside of this window have been eliminated.
+
+![Projection 1](fig/fig_proj1.png){:height="320px"}
+![Projection 2](fig/fig_proj2.png){:height="320px"}
 
 ## Neural network definition
 
@@ -63,8 +64,8 @@ The idea here is to find the optimal neural net that gives the best accuracy for
 
 The construction of the DNN can be implemented directly into the NEXT classification Jupyter notebook by making a corresponding Python method definition.
 
-<a style="text-decoration: none; font-family: verdana, arial;" href="https://github.com/jerenner/next-dnn-topology">{% octicon clippy height:105 vertical-align: middle %}
-<br>**NEXT Classification Jupyter Notebook**</a>
+<a style="text-decoration: none; font-family: verdana, arial; font-color: black; vlink: black;" href="https://github.com/jerenner/next-dnn-topology/blob/master/NEXT_classification.ipynb">{% octicon clippy height:105 vertical-align: middle %}
+<br>**NEXT Classification Notebook**&nbsp;&nbsp;</a>
 {: style="color:black; font-size: 130%; text-align: center;"}
 
 For example:

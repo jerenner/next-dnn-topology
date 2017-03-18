@@ -50,7 +50,7 @@ We will start with SiPM response data from each event arranged in a $$20\times 2
 
 ## Neural network definition
 
-This is the most interesting part of the study in which we determine which neural net performs best for the classification problem.  For this, several factors must be considered, including:
+This main goal of this study is to determine which neural net performs best for the classification problem.  For this, several factors must be considered, including:
 
 - **accuracy**: what percentage of the time the DNN correctly classifies an event.  The accuracy on test events (those not used in the training process) is the most important factor in evaluating the performance of the DNN.
 - **network size**: the number of parameters in the network.  Smaller is better, but if going larger means more accuracy it is likely to be worth it.

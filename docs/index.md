@@ -1,5 +1,6 @@
 ---
-title:
+title: 
+tlink: "https://github.com/jerenner/next-dnn-topology"
 layout: default
 ---
 
@@ -41,8 +42,11 @@ Rather than attempting to reconstruct the 3D track from these patterns and then 
 
 We will start with SiPM response data from each event arranged in a $$20\times 20\times N_s$$ matrix.  In this case the SiPM signals have already been integrated into $$N_s$$ time slices and the $$20\times 20$$ window in (x,y) over which the event occurs has been selected.  Note that the events are expected to be localized to approximately a cube of side 20 cm<sup>3</sup>.  Events containing less than some percentage (90%) of their total SiPM charge in SiPMs outside of this window have been eliminated.
 
+{: .center}
 ![Projection 1](fig/fig_proj1.png){:height="320px"}
 ![Projection 2](fig/fig_proj2.png){:height="320px"}
+**Examples of 20x20 2D SiPM projections** from a single event.
+{: style="color:gray; font-size: 80%; text-align: left;"}
 
 ## Neural network definition
 

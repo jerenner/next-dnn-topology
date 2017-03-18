@@ -4,9 +4,6 @@ tlink: "https://github.com/jerenner/next-dnn-topology"
 layout: default
 ---
 
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
 Here we describe a project addressing signal/background classification in the [NEXT](http://next.ific.uv.es/next) experiment using deep neural networks (DNNs). This study is a continuation of [a previous study](https://arxiv.org/abs/1609.06202) of background rejection in NEXT using DNNs.  Though some of the details described in this study will be re-iterated below, please see the previous study for more details on how the NEXT detector operates.
 
 - [Software Requirements](#software-requirements)

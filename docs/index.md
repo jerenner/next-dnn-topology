@@ -68,8 +68,7 @@ The idea here is to find the optimal neural net that gives the best accuracy for
 
 The construction of the DNN can be implemented directly into the NEXT classification Jupyter notebook by making a corresponding Python method definition.
 
-<a style="text-decoration: none; font-family: verdana, arial; font-color: black; vlink: black;" href="https://github.com/jerenner/next-dnn-topology/blob/master/NEXT_classification.ipynb">{% octicon clippy height:105 vertical-align: middle %}
-<br>**NEXT Classification Notebook**&nbsp;&nbsp;</a>
+<a style="text-decoration: none; font-family: verdana, arial; font-color: black; vlink: black;" href="https://github.com/jerenner/next-dnn-topology/blob/master/NEXT_classification.ipynb">**NEXT Classification Notebook**&nbsp;&nbsp;</a>
 {: style="color:black; font-size: 130%; text-align: center;"}
 
 For example:

@@ -75,15 +75,22 @@ The construction of the DNN can be implemented directly into the NEXT classifica
 For example:
 
 ```python
-inputs = Input(shape=(xdim, ydim, zdim, 1))
-cinputs = Convolution3D(256, 5, 5, 5, border_mode='same', subsample=(4, 4, 4), activation='relu',init='lecun_uniform')(inputs)
-cinputs = MaxPooling3D(pool_size=(3, 3, 3), strides=(2, 2, 2), border_mode='same', dim_ordering='default')(cinputs)
-f1 = Flatten()(cinputs)
-f1 = Dense(output_dim=128, activation='relu', init='lecun_uniform')(f1)
-f1 = Dropout(.3)(f1)
-inc_output = Dense(output_dim=1, activation='sigmoid',init='normal')(f1)
-model = Model(inputs, inc_output)
+# define a fully-connected network with 64 hidden neurons and 1 readout neuron
+def model_FC(inputs):
+    
+    f1 = Flatten()(inputs)
+    f1 = Dense(output_dim=64, activation='sigmoid', init='normal'(f1)
+    inc_output = Dense(output_dim=1, activation='sigmoid', init='normal')(f1)
+    model = Model(inputs, inc_output)
+
+    model.compile(loss='binary_crossentropy',
+                  optimizer=Nadam(lr=0.00001, beta_1=0.9, beta_2=0.999,
+                                  epsilon=1e-08, schedule_decay=0.01),
+                                  metrics=['accuracy'])  
+    return model
 ```
+
+This basic network is unlikely to get very far - a much better one will need to be implemented.
 
 ## Additional References
 Some additional references:

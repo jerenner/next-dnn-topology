@@ -54,7 +54,7 @@ This is the most interesting part of the study in which we determine which neura
 
 - **accuracy**: what percentage of the time the DNN correctly classifies an event.  The accuracy on test events (those not used in the training process) is the most important factor in evaluating the performance of the DNN.
 - **network size**: the number of parameters in the network.  Smaller is better, but if going larger means more accuracy it is likely to be worth it.
-- **network architecture**: the techniques employed in the construction of the network.  This will affect how long it takes to train the network, the tendency of the network to overtrain (memorize the training data rather than learn more general features that can be applied outside of the training set), and possibly how 
+- **network architecture**: the techniques employed in the construction of the network.
 
 It is likely that since our data is formatted in a 3D matrix, we will want to use 2D or 3D convolutional layers, in which a layer of neurons shares the same weights and biases, and each neuron in the layer takes as input some subset of the neurons in the previous layer.  The neurons in such layers roughly serve to identify certain "features" or patterns in neighboring input neurons.
 
@@ -64,7 +64,7 @@ It is likely that since our data is formatted in a 3D matrix, we will want to us
 
 Keras/TensorFlow allows for the fast construction of neural networks using several different types of layers ([Dense (fully connected)](https://keras.io/layers/core/), [Conv2D, Conv3D](https://keras.io/layers/convolutional/)) with different [activation functions](https://keras.io/activations/) (sigmoid, relu, tanh), [loss functions](https://keras.io/losses/) and [training optimizers](https://keras.io/optimizers/), in combination with other deep learning techniques such as [dropout](https://keras.io/layers/core/#dropout) and [pooling](https://keras.io/layers/pooling/).
 
-The idea here is to find the optimal neural net that gives the best accuracy for the smallest network size and learns quickly and with fewest training events.  Again, though all such factors should be considered, the most important factor is the overall accuracy.  Even better, a neural network that allows for some understanding of how the classification decision is being made would be ideal.
+The idea here is to find the optimal neural net that gives the best accuracy for the smallest network size, learns quickly, and does so with the fewest training events.  Again, though all such factors should be considered, the most important factor is the overall accuracy.  Even better, a neural network that allows for some understanding of how the classification decision is being made would be ideal.
 
 The construction of the DNN can be implemented directly into the NEXT classification Jupyter notebook by making a corresponding Python method definition.
 

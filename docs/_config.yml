@@ -1,4 +1,4 @@
 title: Topology in NEXT using Deep Neural Networks
 markdown: kramdown
 theme: minima
-gems: [jekyll-octicons]
+plugins: []

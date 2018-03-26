@@ -34,23 +34,23 @@ NEXT has further power to reject background because the ionization track of most
 **Monte Carlo simulation** of a signal (left) and background (right) event.  The signal event consists of two electrons emitted from a common vertex with a total energy equal to $$Q_{\beta\beta}$$.  The background event is a single electron with energy $$Q_{\beta\beta}$$.  Figure from [*J. Mart&iacute;n-Albo et al.  Sensitivity of NEXT-100 to neutrinoless double beta decay.  \[JHEP 1605 159 (2016)\]*](https://arxiv.org/abs/1511.09246).
 {: style="color:gray; font-size: 80%; text-align: left;"}
 
-The electron track itself is observed in NEXT by a plane of silicon photomultipliers (SiPMs), which convert photons incident on their sensitive area into electrical current.  In the present phase of NEXT, the 10-kg-scale detector NEXT-NEW, the SiPM plane consists of 1792 SiPMs arranged with a 1 cm pitch.  In detecting an event, 2D (x,y) projections of the corresponding ionization track are formed by the light detected in the SiPMs in each z-interval ("slice") of the track.  That is, for each event, we are presented with a series of 2D SiPM "patterns" which must be used to make a decision on which type of event occurred - "signal" or "background".  
+The electron track itself is observed in NEXT by a plane of silicon photomultipliers (SiPMs), which convert photons incident on their sensitive area into electrical current.  In the present phase of NEXT, the 10-kg-scale detector NEXT-NEW, the SiPM plane consists of 1792 SiPMs arranged with a 1 cm pitch.  In detecting an event, 2D (x,y) projections of the corresponding ionization track are formed by the light detected in the SiPMs in each z-interval ("slice") of the track.  That is, for each event, we are presented with a series of 2D SiPM "patterns" which can then be used to reconstruct one or more "hits" (energy depositions) per pattern.  This collection of hits must be used to make a decision on which type of event occurred - "signal" or "background".  
 
-Rather than attempting to reconstruct the 3D track from these patterns and then examine the topology of the track to determine whether we have a signal or background event, we will attempt to skip the reconstruction step altogether.  *We intend to train a DNN to learn the difference between a signal and a background event based solely on the matrix of SiPM signals.*  The idea of one or two "blobs", or how we differentiate the two types of events visually, is no longer relevant.  The DNN works out in whatever way it can how to distinguish the two types of events.
+To do this, we will divide up the volume over which the event occurred into a 3D grid of smaller cubical volume elements called "voxels."  Each voxel will be filled with the energies of the hits that are reconstructed to a location $$(x,y,z)$$ inside of it.  In this study, we will attempt to use a set of simulated (Monte Carlo) events saved as sets of voxelized hits to train a deep neural network to recognize patterns of voxels that correspond to "signal" events and "background" events.  We will then apply this trained net to real data from the detector NEXT-NEW.
 
 ## Data format
 
-We will start with SiPM response data from each event arranged in a $$20\times 20\times N_s$$ matrix.  In this case the SiPM signals have already been integrated into $$N_s$$ time slices and the $$20\times 20$$ window in (x,y) over which the event occurs has been selected.  Note that the events are expected to be localized to approximately a cube of side 20 cm<sup>3</sup>.  Events containing less than some percentage (90%) of their total SiPM charge in SiPMs outside of this window have been eliminated.
+We will begin with a collection of voxels from each event arranged in a $$30\times 30\times 30$$ matrix.  Note that the events are expected to be localized to approximately a cube of side 45 cm<sup>3</sup>.  Events containing energy depositions outside of this window will not be included.
 
-{: .center}
+<!--{: .center}
 ![Projection 1](fig/fig_proj1.png){:height="320px"}
 ![Projection 2](fig/fig_proj2.png){:height="320px"}
 **Examples of 20x20 2D SiPM projections** from a single event.
-{: style="color:gray; font-size: 80%; text-align: left;"}
+{: style="color:gray; font-size: 80%; text-align: left;"}-->
 
 ## Neural network definition
 
-This main goal of this study is to determine which neural net performs best for the classification problem.  For this, several factors must be considered, including:
+One goal of this study is to determine which neural net performs best for the classification problem.  For this, several factors must be considered, including:
 
 - **accuracy**: what percentage of the time the DNN correctly classifies an event.  The accuracy on test events (those not used in the training process) is the most important factor in evaluating the performance of the DNN.
 - **network size**: the number of parameters in the network.  Smaller is better, but if going larger means more accuracy it is likely to be worth it.

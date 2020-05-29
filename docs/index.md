@@ -40,7 +40,7 @@ To do this, we will divide up the volume over which the event occurred into a 3D
 
 ## Data format
 
-We will begin with a collection of voxels from each event arranged in a $$20\times 20\times 60$$ matrix.  These events are expected to be localized to approximately a cube of side 30 cm<sup>3</sup>.  Events containing energy depositions outside of this window will not be included.
+Here we will study events that are not direct simulation of neutrinoless double-beta, but rather are back-to-back $$e^{+}e^{-}$$ tracks with a total energy of 1.592 MeV. We do this because such events can also be produced and studied experimentally via electron-positron pair production and exhibit a topological signature similar to that of neutrinoless double-beta. We will begin with a collection of voxels from each event arranged in a $$20\times 20\times 60$$ matrix.  These events are expected to be localized to approximately a cube of side 30 cm<sup>3</sup>.  Events containing energy depositions outside of this window will not be included.
 
 {: .center}
 <p align="center">
@@ -67,7 +67,7 @@ That is, we construct a neural network that computes the probability that a give
 
 ## Jupyter notebook
 
-The study is outlined in the [NEXT Classification Jupyter Notebook](https://github.com/jerenner/next-dnn-topology/blob/master/NEXT_classification.ipynb). The initial goal is to design an optimal network in PyTorch to perform the classification.
+The study is outlined in the [NEXT Classification Jupyter Notebook](https://github.com/jerenner/uscnncourse/blob/master/next/NEXT_classification.ipynb). The initial goal is to design an optimal network in PyTorch to perform the classification.
 
 An example network is given:
 
